@@ -1,0 +1,27 @@
+version: '3.1'
+services:
+    web-server:
+        build:
+            context: ./nginx
+            dockerfile: Dockerfile
+        ports:
+            - 5001:80
+            - 5002:443
+        volumes:
+            - ./nginx:/nginx/
+        networks:
+            - my-network                                
+    web-app:
+        build:
+            context: ./app
+            dockerfile: Dockerfile
+        image: flask:0.0.1       
+        container_name: webapp-flask
+        volumes:
+            - ./app:/app/
+        networks:
+            my-network:
+                aliases:
+                    - flask-app
+networks:
+    my-network:                    
