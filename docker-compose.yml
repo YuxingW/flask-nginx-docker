@@ -27,23 +27,24 @@ services:
             my-network:
                 aliases:
                     - flask-app
-    image: linuxserver/letsencrypt
-    container_name: letsencrypt
-    cap_add:
-      - NET_ADMIN
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/Amsterdam
-      - URL=decision-radar.com
-      - SUBDOMAINS=www,
-      - VALIDATION=http
-      - DNSPLUGIN=cloudflare #optional
-    volumes:
-      - /config:/config
-    ports:
-      - 443:443
-      - 80:80 #optional
-    restart: unless-stopped                          
+    certbot:
+        image: linuxserver/letsencrypt
+        container_name: letsencrypt
+        cap_add:
+        - NET_ADMIN
+        environment:
+        - PUID=1000
+        - PGID=1000
+        - TZ=Europe/Amsterdam
+        - URL=decision-radar.com
+        - SUBDOMAINS=www,
+        - VALIDATION=http
+        - DNSPLUGIN=cloudflare #optional
+        volumes:
+        - /config:/config
+        ports:
+        - 443:443
+        - 80:80 #optional
+        restart: unless-stopped                          
 networks:
     my-network:                    
