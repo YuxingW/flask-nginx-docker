@@ -1,7 +1,5 @@
 # flask-nginx-docker
-Docker template for hosting Flask and Nginx on docker on separated containers and plus Let's Encrypted SSL.
-
-**In progress**
+Docker template for hosting Flask and Nginx on docker on separated containers.
 
 This repo created because it was always time consuming to `Dockerize` a Python app and nginx with docker. With this repo you are able to run your web application on containers.
 
@@ -21,6 +19,10 @@ services:
 ```
 
 I used ports `5001` and `5002` in case `80` and `443` have been consumed already.
+
+## Work To Do
+
+1. Add certbot docker conatiner to nginx for automatically issues certificate from LetsEncrypted.
 
 
 ## PS
