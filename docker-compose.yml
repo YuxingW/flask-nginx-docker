@@ -1,23 +1,5 @@
 version: '3.7'
 services:
-    web-server:
-        build:
-            context: ./nginx
-            dockerfile: Dockerfile
-        environment:
-            domain: decision-radar.com
-        ports:
-            - 5001:80
-            - 5002:443
-        volumes:
-            - ./nginx:/nginx/
-            - ./data/certbot/conf:/etc/letsencrypt
-            - ./data/certbot/www:/var/www/certbot  
-        depends_on:
-            - web-app
-            - certbot          
-        networks:
-            - my-network                                
     web-app:
         build:
             context: ./app
@@ -29,27 +11,36 @@ services:
         networks:
             my-network:
                 aliases:
-                    - flask-app
-    certbot:
-        image: linuxserver/letsencrypt
-        container_name: letsencrypt
-        cap_add:
-        - NET_ADMIN
+                    - flask-app    
+    web-server:
+        build:
+            context: ./nginx
+            dockerfile: Dockerfile
         environment:
-        - PUID=1000
-        - PGID=1000
-        - TZ=Europe/Amsterdam
-        - URL=decision-radar.com
-        - SUBDOMAINS=www,
-        - VALIDATION=http
-        - DNSPLUGIN=cloudflare #optional
-        volumes:
-        - /config:/config
-        - ./data/certbot/conf:/etc/letsencrypt
-        - ./data/certbot/www:/var/www/certbot          
+            domain: decision-radar.com
         ports:
-        - 443:443
-        - 80:80 #optional
-        restart: unless-stopped                          
+            - 5001:80
+            - 5002:443
+        volumes:
+            - ./nginx:/nginx/ 
+            - ./data/certbot/conf:/etc/letsencrypt
+            - ./data/certbot/www:/var/www/certbot            
+        depends_on:
+            - web-app
+            - certbot-app
+        networks:
+            - my-network
+    certbot-app:
+        build:
+            context: ./letsencrypted
+            dockerfile: Dockerfile       
+        container_name: letsencrypted
+        volumes:
+            - ./data/certbot/conf:/etc/letsencrypt
+            - ./data/certbot/www:/var/www/certbot  
+        networks:
+            my-network:
+                aliases:
+                    - flask-app               
 networks:
     my-network:                    
