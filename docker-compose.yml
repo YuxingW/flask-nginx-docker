@@ -12,7 +12,10 @@ services:
         volumes:
             - ./nginx:/nginx/
             - ./data/certbot/conf:/etc/letsencrypt
-            - ./data/certbot/www:/var/www/certbot            
+            - ./data/certbot/www:/var/www/certbot  
+        depends_on:
+            - web-app
+            - certbot          
         networks:
             - my-network                                
     web-app:
