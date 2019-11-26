@@ -4,7 +4,6 @@ services:
         build:
             context: ./app
             dockerfile: Dockerfile
-        image: flask:0.0.1       
         container_name: webapp-flask
         volumes:
             - ./app:/app/
@@ -22,25 +21,10 @@ services:
             - 5001:80
             - 5002:443
         volumes:
-            - ./nginx:/nginx/ 
-            - ./data/certbot/conf:/etc/letsencrypt
-            - ./data/certbot/www:/var/www/certbot            
+            - ./nginx:/nginx/           
         depends_on:
             - web-app
-            - certbot-app
         networks:
-            - my-network
-    certbot-app:
-        build:
-            context: ./letsencrypted
-            dockerfile: Dockerfile       
-        container_name: letsencrypted
-        volumes:
-            - ./data/certbot/conf:/etc/letsencrypt
-            - ./data/certbot/www:/var/www/certbot  
-        networks:
-            my-network:
-                aliases:
-                    - flask-app               
+            - my-network            
 networks:
     my-network:                    
